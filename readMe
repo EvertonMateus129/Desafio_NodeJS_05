@@ -1,0 +1,10 @@
+Desafio 05:
+
+No desafio 5, tentei me desafiar um pouco mais e entender um pouco mais afundo do código e como ele funcionava.
+
+Primeiramente, peguei meu código antigo e refiz ele por completo com a ajuda do ChatGPT para entender como que aquele código funcionava, e aprimorar um pouco mais da minha noção no código.
+Troquei nome de variáveis, refiz a função com a ajuda do GPT, etc.
+
+Para fazer o que foi proposto pelo desafio, foi com a ajuda do GPT também, aprendi a usar um import novo que foi o fs.
+Depois coloquei o código de transformar os dados dos alunos no csv abaixo do meu else na function;
+Aprendi a criar um cabeçalho no arquivo csv e criar colunas, além de criar o arquivo csv no diretório.
