@@ -35,6 +35,17 @@ app.use(express.json());
  * Server Activation
  */
 
+  class Student {
+    name: string;
+    age: number;
+    grade: number;
+
+    constructor(name:string, age:number, grade:number) {
+      this.name = name;
+      this.age = age;
+      this.grade = grade;
+    }
+  }
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 
@@ -44,30 +55,28 @@ app.listen(PORT, () => {
     output: process.stdout,
   });
 
-  let students = 0;
+  let studentsInicial = 0;
   let totalStudents = 0;
 
-  let studentsInfo: {
-    studentName: string;
-    studentGrade: number;
-    studentAge: number;
-  }[] = [];
+ let studentsClass: Array<Student> = [];
 
   r1.question(
     "Quantos alunos têm na sala de aula?\n",
     (numberStudents: string) => {
-      students = parseInt(numberStudents);
+      studentsInicial = parseInt(numberStudents);
 
       function askStudentsData() {
-        if (totalStudents < students) {
+        if (totalStudents < studentsInicial) {
           r1.question("Qual o nome do aluno?\n", (studentName: string) => {
             r1.question("Qual a nota do aluno?\n", (studentGrade: string) => {
               r1.question("Qual a idade do aluno?\n", (studentAge: string) => {
-                studentsInfo.push({
+                const student = new Student(
                   studentName,
-                  studentGrade: parseFloat(studentGrade),
-                  studentAge: parseFloat(studentAge),
-                });
+                  parseFloat(studentAge),
+                  parseFloat(studentGrade)
+                )
+
+                studentsClass.push(student)
                 totalStudents++;
                 askStudentsData();
               });
@@ -77,19 +86,19 @@ app.listen(PORT, () => {
           console.log(
             `A quantidade dos alunos são ${totalStudents}, e as informações deles são:`
           );
-          console.log(studentsInfo);
+          console.log(studentsClass);
 
-          const bestStudent = studentsInfo.reduce((best, current) =>
-            current.studentGrade > best.studentGrade ? current : best
+          const bestStudent = studentsClass.reduce((best, current) =>
+            current.grade > best.grade ? current : best
           );
 
           console.log(
-            `O aluno com a melhor nota é o ${bestStudent.studentName} com a nota ${bestStudent.studentGrade}`
+            `O aluno com a melhor nota é o ${bestStudent.name} com a nota ${bestStudent.grade}`
           );
 
           const header = "Nome, Nota, Idade, \n"
           
-          const rows = studentsInfo.map(student => `${student.studentName}, ${student.studentGrade}, ${student.studentAge}`).join("\n");
+          const rows = studentsClass.map(student => `${student.name}, ${student.grade}, ${student.age}`).join("\n");
 
           const csvContent = header + rows;
 
@@ -98,11 +107,11 @@ app.listen(PORT, () => {
           console.log("Arquivo students.csv criado com sucesso.")
 
 
-          if (studentsInfo.length >= 3) {
-            const studentAverage = studentsInfo.slice(0, 3);
+          if (studentsClass.length >= 3) {
+            const studentAverage = studentsClass.slice(0, 3);
 
-            const sumGrades = studentsInfo.reduce(
-              (acc, studentsInfo) => acc + studentsInfo.studentGrade,
+            const sumGrades = studentsClass.reduce(
+              (acc, studentsClass) => acc + studentsClass.grade,
               0
             );
 
@@ -110,7 +119,7 @@ app.listen(PORT, () => {
 
             console.log(
               `A soma dos alunos é: ${studentAverage
-                .map((a) => a.studentName)
+                .map((a) => a.name)
                 .join(",")} é ${sumAverage.toFixed(2)} `
             );
           } else {
